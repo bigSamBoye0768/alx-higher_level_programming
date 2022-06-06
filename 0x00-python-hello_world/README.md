@@ -1,5 +1,4 @@
-hell script that runs a Python script
-<h3>1-run_inline</h3>	Shell script that runs Python code
+1-run_inline	Shell script that runs Python code
 
 2-print.py	Python script that prints a string followed by a new line
 
