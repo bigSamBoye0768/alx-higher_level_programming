@@ -1,29 +1,23 @@
 #!/usr/bin/python3
-""" Select states with names matching arguments """
-
-
-from sys import argv
-import MySQLdb
+"""takes in the name of a state as an argument and
+lists all cities of that state,
+using the database hbtn_0e_4_usa"""
 
 if __name__ == '__main__':
 
-    db_user = argv[1]
-    db_passwd = argv[2]
-    db_name = argv[3]
-    user_state = argv[4]
+    import MySQLdb
+    import sys
 
-    database = MySQLdb.connect(host='localhost',
-                               port=3306,
-                               user=db_user,
-                               passwd=db_passwd,
-                               db=db_name)
+    db = MySQLdb.connect(host='localhost', port=3306,
+                         user=sys.argv[1], passwd=sys.argv[2], db=sys.argv[3])
 
-    cursor = database.cursor()
-
-    cursor.execute('SELECT cities.name FROM cities\
-                   JOIN states\
-                   ON cities.state_id = states.id\
-                   WHERE states.name = %s\
-                   ORDER BY states.id ASC', (user_state,))
-    result = []
-    print(', '.join([value[0] for value in cursor.fetchall()]))
+    cur = db.cursor()
+    cur.execute("SELECT cities.name\
+                FROM cities LEFT JOIN states\
+                ON states.id = cities.state_id\
+                WHERE states.name = %s\
+                ORDER BY cities.id ASC", (sys.argv[4],))
+    rows = cur.fetchall()
+    print(", ".join([row[0] for row in rows]))
+    cur.close()
+    db.close()
